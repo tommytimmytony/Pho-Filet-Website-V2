@@ -1,0 +1,7 @@
+node_modules/
+dist/
+server/.env
+server/db/chat.db
+server/db/chat.db-shm
+server/db/chat.db-wal
+.lavish/

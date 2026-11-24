@@ -1,107 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7JZ92ZM238"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7JZ92ZM238');
-</script>
-    <link rel="icon" href="logo.jpg" />
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-    <title>Phở Filet</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/logo.jpg">
+  <title>Phở Filet | Menu</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7JZ92ZM238"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7JZ92ZM238');
+  </script>
 </head>
 <body>
-    
-    <div class="container-fluid p-0">
-      <div class="header">
-         <div class="logo" style="display: flex;">
-         <a href="#"></a><img src="logo.jpg" alt="Logo" href="#" class="logo_img" style="cursor: pointer;" width="100px"/>
-         <a href="#"></a><p class="logo_name">Pho Filet</p>
-         </div>
-
-         
-          <div class="info_sections">
-              
-              <a href="tel:210-520-5630"><p class="info">(210) 520-5630 </a><br>
-                  9910 TX-1604 Loop<br>
-                  San Antonio, TX 78254
-               </a>
-            <a  target="_blank" rel="noopener noreferrer" href="https://goo.gl/maps/3ZLpLwrPDEQkyua37">
-               <p class="direction">Direction</p>
-            </a>
-            </div>
-            
-           <div class="dropdown" data-dropdown>
-               <button class="link" data-dropdown-button></button>
-               
-               <div class="dropdown_hour">
-                     <div class="hours row">
-                        <div class="hours col-md-3">Mon</div>
-                        <div class="hours col-md-9">Closed</div>
-                     </div>
-                     <div class="hours row">
-                        <div class="hours col-md-3">Tue</div>
-                        <div class="hours col-md-9">11:00 am - 9:00 pm</div>
-                     </div>
-                     <div class="hours row">
-                        <div class="hours col-md-3">Wed</div>
-                        <div class="hours col-md-9">11:00 am - 9:00 pm</div>
-                     </div>
-                     <div class="hours row">
-                        <div class="hours col-md-3">Fri</div>
-                        <div class="hours col-md-9">11:00 am - 9:00 pm</div>
-                     </div>
-                     <div class="hours row">
-                        <div class="hours col-md-3">Sat</div>
-                        <div class="hours col-md-9">11:00 am - 9:00 pm</div>
-                     </div>
-                      <div class="hours row">
-                        <div class="hours col-md-3">Sun</div>
-                        <div class="hours col-md-9">11:00 am - 8:30 pm</div>
-                     </div>
-               </div>
-           </div>
-      </div>
-
-
-        <div class="main_container">
-            <span class="menu_text text-center" >Menu</span>
-            <hr style="width: 40% ; justify-self: center;"> 
-                                <!-- Appetizers -->
-            <!-- <span class="item_Title" style="font-size:2rem;">Appetizers</span>
-           
-            <div class="item_container row d-flex justify-content-between
-            align-items-baseline mx-auto gx-6">
-
-             <div class="col-md-7"> -->
-               <!-- <h1 class="item_name" style="font-size: 1.5rem;">A1-Spring-Rolls (2pcs)</h1>
-            </div>
-             <div class="item_price col-md-5 text-end" style="font-size: 1.75rem">
-                $6.50
-            </div>
-            
-             <span class="item_description" style="font-size: 1rem; max-width: 50%;" >Lean char-grilled pork, shrimp, lettuce, pickled carrots, cilantro, & rice vermicelli noodles wrapped in rice paper</span > -->
-
-            <!-- <span class="item_Title">${title}</span>
-  
-            <div class="item_container row d-flex justify-content-between
-            align-items-baseline mx-auto gx-6">
-                <div class="col-md-7">
-               <h1 class="item_name">${item.name}</h1>
-                </div>
-               <div class="item_price col-md-5">
-            </div>`; -->
-            
-    </div>
-    <script src="script.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
