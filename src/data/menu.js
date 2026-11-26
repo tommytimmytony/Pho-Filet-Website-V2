@@ -14,14 +14,14 @@ export const categories = [
     items: [
       { name: "P1 - Beef Pho (with or without Beef Ball)", price: 16.95, description: "" },
       { name: "P10 - Chicken Pho", price: 15.95, description: "" },
-      { name: "P11 - Vegetable Pho", price: 15.95, description: "- with Tofu (+ $1.00)\n- without Tofu" },
+      { name: "P11 - Vegetable Pho", price: 15.95, description: "- with Tofu (+ $2.00)\n- without Tofu" },
       { name: "P12 - Shrimp Pho", price: 16.95, description: "" },
     ],
   },
   {
     title: "Vermicelli",
     items: [
-      { name: "B1 - Combination Vermicelli", price: 16.95, description: "" },
+      { name: "B1 - Combination Vermicelli", price: 16.95, description: "Chargrilled pork, shrimp, and fried egg rolls" },
       { name: "B2 - Egg Roll Vermicelli", price: 15.95, description: "" },
       { name: "B4 - Char-grilled Pork Vermicelli", price: 15.95, description: "" },
       { name: "B5 - Char-grilled Shrimp Vermicelli", price: 15.95, description: "" },
@@ -33,7 +33,7 @@ export const categories = [
   {
     title: "Plates",
     items: [
-      { name: "C1 - Combination with Steamed Rice", price: 16.95, description: "" },
+      { name: "C1 - Combination with Steamed Rice", price: 16.95, description: "Chargrilled pork, shrimp, and pan-fried egg" },
       { name: "C4 - Char-grilled Pork with Steamed Rice", price: 15.95, description: "" },
       { name: "C5 - Char-grilled Shrimp with Steamed Rice", price: 15.95, description: "" },
       { name: "C6 - Stir-fried Beef with Steamed Rice", price: 15.95, description: "" },
@@ -44,7 +44,7 @@ export const categories = [
   {
     title: "Fried Rice",
     items: [
-      { name: "F1 - Combination Fried Rice", price: 16.95, description: "" },
+      { name: "F1 - Combination Fried Rice", price: 16.95, description: "Beef, chicken, and shrimp" },
       { name: "F2 - Chicken Fried Rice", price: 15.95, description: "" },
       { name: "F3 - Beef Fried Rice", price: 15.95, description: "" },
       { name: "F4 - Shrimp Fried Rice", price: 15.95, description: "" },
@@ -53,7 +53,7 @@ export const categories = [
   {
     title: "Lo Mein",
     items: [
-      { name: "Combination Lo Mein", price: 16.95, description: "" },
+      { name: "Combination Lo Mein", price: 16.95, description: "Beef, chicken, and shrimp" },
       { name: "Chicken Lo Mein", price: 15.95, description: "" },
       { name: "Beef Lo Mein", price: 15.95, description: "" },
       { name: "Shrimp Lo Mein", price: 15.95, description: "" },
