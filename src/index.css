@@ -211,6 +211,15 @@ h1 { margin: 0; font-size: 2.4rem; font-weight: 750; letter-spacing: -.03em; }
 .cache-answer { margin: 6px 0 0; font-size: .82rem; color: var(--muted); line-height: 1.5; }
 .cache-delete { width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--muted); font-size: .8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .cache-delete:hover { border-color: #dc2626; color: #dc2626; background: #fef2f2; }
+.cache-edit { width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-size: .8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.cache-edit:hover { border-color: var(--red); background: #fef2f2; }
+.cache-edit-form { margin-top: 8px; }
+.cache-edit-actions { display: flex; gap: 8px; margin-top: 6px; }
+.cache-save-btn { padding: 5px 14px; background: var(--red); color: #fff; border: none; border-radius: 6px; font-size: .8rem; font-weight: 600; cursor: pointer; }
+.cache-save-btn:hover { opacity: .9; }
+.cache-save-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cache-cancel-btn { padding: 5px 14px; background: none; border: 1px solid #ccc; border-radius: 6px; font-size: .8rem; color: var(--muted); cursor: pointer; }
+.cache-cancel-btn:hover { border-color: var(--red); color: var(--red); }
 
 /* Engagement funnel */
 .funnel { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }

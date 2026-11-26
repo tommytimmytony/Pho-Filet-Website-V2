@@ -178,6 +178,9 @@ function CacheManager({ onUpdate }) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [saving, setSaving] = useState(false);
+  const [editingKey, setEditingKey] = useState(null);
+  const [editAnswer, setEditAnswer] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
 
   const fetchCache = useCallback(async () => {
     try {
@@ -221,6 +224,38 @@ function CacheManager({ onUpdate }) {
     }
   }
 
+  function startEdit(entry) {
+    setEditingKey(entry.key);
+    setEditAnswer(entry.reply);
+  }
+
+  function cancelEdit() {
+    setEditingKey(null);
+    setEditAnswer("");
+  }
+
+  async function handleEditSave(entry) {
+    if (!editAnswer.trim()) return;
+    setEditSaving(true);
+    try {
+      // Delete old entry then re-add with updated answer
+      await fetch(`/api/stats/cache/${encodeURIComponent(entry.key)}`, { method: "DELETE" });
+      await fetch("/api/stats/cache", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: entry.question || entry.key, answer: editAnswer.trim() }),
+      });
+      setEditingKey(null);
+      setEditAnswer("");
+      fetchCache();
+      onUpdate();
+    } catch (err) {
+      console.error("Failed to update cache entry:", err);
+    } finally {
+      setEditSaving(false);
+    }
+  }
+
   return (
     <>
       <form className="cache-form" onSubmit={handleAdd}>
@@ -253,10 +288,29 @@ function CacheManager({ onUpdate }) {
                 <span className="cache-question">{entry.question || entry.key}</span>
                 <div className="cache-entry-actions">
                   {entry.manual && <span className="cache-badge">Manual</span>}
+                  <button className="cache-edit" onClick={() => startEdit(entry)} title="Edit answer">✏️</button>
                   <button className="cache-delete" onClick={() => handleDelete(entry.key)} title="Remove from cache">✕</button>
                 </div>
               </div>
-              <p className="cache-answer">{entry.reply.slice(0, 150)}{entry.reply.length > 150 ? "…" : ""}</p>
+              {editingKey === entry.key ? (
+                <div className="cache-edit-form">
+                  <textarea
+                    className="cache-input cache-textarea"
+                    value={editAnswer}
+                    onChange={(e) => setEditAnswer(e.target.value)}
+                    rows={3}
+                    autoFocus
+                  />
+                  <div className="cache-edit-actions">
+                    <button className="cache-save-btn" onClick={() => handleEditSave(entry)} disabled={editSaving || !editAnswer.trim()}>
+                      {editSaving ? "Saving…" : "Save"}
+                    </button>
+                    <button className="cache-cancel-btn" onClick={cancelEdit}>Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <p className="cache-answer">{entry.reply.slice(0, 150)}{entry.reply.length > 150 ? "…" : ""}</p>
+              )}
             </div>
           ))}
         </div>
