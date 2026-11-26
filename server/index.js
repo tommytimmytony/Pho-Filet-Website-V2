@@ -9,6 +9,7 @@ const statsRoutes = require("./routes/stats");
 const eventsRoutes = require("./routes/events");
 const { requireAuth, handleLogin, handleCheck, handleLogout } = require("./auth");
 const cache = require("./cache");
+const { startHealthChecks } = require("./health");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -56,5 +57,6 @@ if (fs.existsSync(distPath)) {
 
 app.listen(PORT, () => {
   cache.loadSaved();
+  startHealthChecks();
   console.log(`Pho Filet server running at http://localhost:${PORT}`);
 });

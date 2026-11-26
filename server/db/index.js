@@ -42,6 +42,17 @@ db.exec(`
   )
 `);
 
+// Create health_checks table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS health_checks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp TEXT DEFAULT (datetime('now')),
+    status TEXT NOT NULL,
+    response_ms INTEGER,
+    error_message TEXT
+  )
+`);
+
 const insertLog = db.prepare(`
   INSERT INTO chat_logs (user_message, bot_reply, input_tokens, output_tokens, response_ms, cached, success, error_message)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -172,4 +183,45 @@ function deleteSavedCache(question) {
   return db.prepare("DELETE FROM saved_cache WHERE question = ?").run(question).changes > 0;
 }
 
-module.exports = { logChat, getStats, getRecentLogs, getHourlyActivity, getTopQuestions, getSavedCache, addSavedCache, deleteSavedCache, logEvent, getEngagementStats, getDailyVisits, getDailyChats };
+function logHealthCheck({ status, responseMs, errorMessage }) {
+  db.prepare("INSERT INTO health_checks (status, response_ms, error_message) VALUES (?, ?, ?)").run(status, responseMs, errorMessage || null);
+  // Keep only last 7 days of health checks
+  db.prepare("DELETE FROM health_checks WHERE timestamp < datetime('now', '-7 days')").run();
+}
+
+function getHealthHistory(hours = 24) {
+  return db.prepare(`
+    SELECT timestamp, status, response_ms, error_message
+    FROM health_checks
+    WHERE timestamp >= datetime('now', '-' || ? || ' hours')
+    ORDER BY timestamp
+  `).all(hours);
+}
+
+function getHealthSummary() {
+  const last24h = db.prepare(`
+    SELECT 
+      COUNT(*) as total,
+      COUNT(CASE WHEN status = 'ok' THEN 1 END) as healthy,
+      COUNT(CASE WHEN status = 'error' THEN 1 END) as errors,
+      ROUND(AVG(CASE WHEN status = 'ok' THEN response_ms END)) as avgResponseMs
+    FROM health_checks
+    WHERE timestamp >= datetime('now', '-24 hours')
+  `).get();
+
+  const latest = db.prepare(`
+    SELECT status, response_ms, timestamp, error_message
+    FROM health_checks ORDER BY id DESC LIMIT 1
+  `).get();
+
+  return {
+    total: last24h.total,
+    healthy: last24h.healthy,
+    errors: last24h.errors,
+    uptime: last24h.total > 0 ? Math.round((last24h.healthy / last24h.total) * 100) : null,
+    avgResponseMs: last24h.avgResponseMs || 0,
+    latest: latest || null,
+  };
+}
+
+module.exports = { logChat, getStats, getRecentLogs, getHourlyActivity, getTopQuestions, getSavedCache, addSavedCache, deleteSavedCache, logEvent, getEngagementStats, getDailyVisits, getDailyChats, logHealthCheck, getHealthHistory, getHealthSummary };

@@ -379,6 +379,8 @@ export default function Dashboard() {
   const [dailyChats, setDailyChats] = useState([]);
   const [hourlyActivity, setHourlyActivity] = useState([]);
   const [dailyVisits, setDailyVisits] = useState([]);
+  const [health, setHealth] = useState(null);
+  const [healthHistory, setHealthHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
@@ -392,7 +394,7 @@ export default function Dashboard() {
 
   const fetchData = useCallback(async () => {
     try {
-      const [statsRes, logsRes, topRes, engRes, dailyChatsRes, hourlyRes, dailyVisitsRes] = await Promise.all([
+      const [statsRes, logsRes, topRes, engRes, dailyChatsRes, hourlyRes, dailyVisitsRes, healthRes, healthHistRes] = await Promise.all([
         fetch("/api/stats"),
         fetch("/api/stats/logs?limit=50"),
         fetch("/api/stats/top-questions"),
@@ -400,6 +402,8 @@ export default function Dashboard() {
         fetch("/api/stats/daily-chats"),
         fetch("/api/stats/activity"),
         fetch("/api/events/daily"),
+        fetch("/api/stats/health"),
+        fetch("/api/stats/health/history"),
       ]);
       if (statsRes.status === 401) { setAuthenticated(false); return; }
       setStats(await statsRes.json());
@@ -409,6 +413,8 @@ export default function Dashboard() {
       setDailyChats(await dailyChatsRes.json());
       setHourlyActivity(await hourlyRes.json());
       setDailyVisits(await dailyVisitsRes.json());
+      setHealth(await healthRes.json());
+      setHealthHistory(await healthHistRes.json());
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
     } finally {
@@ -576,21 +582,41 @@ export default function Dashboard() {
           <h2>System health</h2>
           <div className="health-grid">
             <div className="health-item">
-              <span className="health-dot" data-status={stats && stats.errorRate < 10 ? "ok" : "warn"} />
+              <span className="health-dot" data-status={health?.latest?.status === "ok" ? "ok" : "warn"} />
               <span>Gemini API</span>
-              <span className="health-value">{stats?.errorRate < 10 ? "Healthy" : "Degraded"}</span>
+              <span className="health-value">{health?.latest?.status === "ok" ? "Healthy" : health?.latest ? "Down" : "No data"}</span>
+            </div>
+            <div className="health-item">
+              <span className="health-dot" data-status={health && health.uptime >= 95 ? "ok" : "warn"} />
+              <span>Uptime (24h)</span>
+              <span className="health-value">{health?.uptime != null ? `${health.uptime}%` : "N/A"}</span>
+            </div>
+            <div className="health-item">
+              <span className="health-dot" data-status={health && health.avgResponseMs < 5000 ? "ok" : "warn"} />
+              <span>Ping speed</span>
+              <span className="health-value">{health?.avgResponseMs ? `${health.avgResponseMs}ms` : "N/A"}</span>
             </div>
             <div className="health-item">
               <span className="health-dot" data-status="ok" />
               <span>Cache</span>
               <span className="health-value">{stats?.cacheHitRate}% hit rate</span>
             </div>
-            <div className="health-item">
-              <span className="health-dot" data-status={stats && stats.avgResponseMs < 5000 ? "ok" : "warn"} />
-              <span>Response time</span>
-              <span className="health-value">{stats?.avgResponseMs}ms avg</span>
-            </div>
           </div>
+          {healthHistory.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <h3 style={{ fontSize: ".9rem", fontWeight: 600, marginBottom: 8 }}>Response time (last 24h)</h3>
+              <ResponsiveContainer width="100%" height={160}>
+                <LineChart data={healthHistory.map((h) => ({ ...h, time: h.timestamp.slice(11, 16), ms: h.status === "ok" ? h.response_ms : null, err: h.status === "error" ? h.response_ms : null }))}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                  <XAxis dataKey="time" fontSize={11} interval={Math.max(0, Math.floor(healthHistory.length / 8))} />
+                  <YAxis fontSize={11} />
+                  <Tooltip labelFormatter={(t) => `Time: ${t}`} />
+                  <Line type="monotone" dataKey="ms" name="OK (ms)" stroke="#27ae60" strokeWidth={2} dot={false} connectNulls />
+                  <Line type="monotone" dataKey="err" name="Error" stroke="#e74c3c" strokeWidth={2} dot={{ r: 4, fill: "#e74c3c" }} connectNulls={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </section>
       </div>
     </div>

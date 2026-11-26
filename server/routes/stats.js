@@ -1,5 +1,5 @@
 const express = require("express");
-const { getStats, getRecentLogs, getHourlyActivity, getTopQuestions, getDailyChats } = require("../db");
+const { getStats, getRecentLogs, getHourlyActivity, getTopQuestions, getDailyChats, getHealthSummary, getHealthHistory } = require("../db");
 const cache = require("../cache");
 
 const router = express.Router();
@@ -30,6 +30,17 @@ router.get("/top-questions", (req, res) => {
 router.get("/daily-chats", (req, res) => {
   const days = Math.min(parseInt(req.query.days) || 7, 90);
   res.json(getDailyChats(days));
+});
+
+// Health check summary (last 24h)
+router.get("/health", (req, res) => {
+  res.json(getHealthSummary());
+});
+
+// Health check history (for chart)
+router.get("/health/history", (req, res) => {
+  const hours = Math.min(parseInt(req.query.hours) || 24, 168);
+  res.json(getHealthHistory(hours));
 });
 
 // List all cached entries
