@@ -4,8 +4,13 @@ const Database = require("better-sqlite3");
 const dbPath = process.env.DB_PATH || path.join(__dirname, "chat.db");
 const db = new Database(dbPath);
 
-// Enable WAL mode for better performance
-db.pragma("journal_mode = WAL");
+// WAL mode is faster but doesn't work on Azure Files (SMB mount)
+// Use DELETE journal mode when DB_PATH is set (cloud), WAL locally
+if (process.env.DB_PATH) {
+  db.pragma("journal_mode = DELETE");
+} else {
+  db.pragma("journal_mode = WAL");
+}
 
 // Create the chat_logs table
 db.exec(`

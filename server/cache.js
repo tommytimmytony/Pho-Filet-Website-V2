@@ -88,4 +88,4 @@ class ChatCache {
   }
 }
 
-module.exports = new ChatCache(60);
+module.exports = new ChatCache(60 * 24 * 14);
